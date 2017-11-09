@@ -12,7 +12,7 @@ var Enemy = function() {
    this.sprite = 'images/enemy-bug.png';
    this.x = 0;
    this.y = (randomNum(3,0)*85)+60;
-   this.speed = randomNum(150,200);
+   this.speed = randomNum(150,220);
 };
 
 // Update the enemy's position, required method for game
@@ -26,11 +26,25 @@ Enemy.prototype.update = function(dt) {
    if(this.x > 505){
       this.x = -80;
    }
+   this.checkCollisions();
 };
 
 // Draw the enemy on the screen, required method for game
 Enemy.prototype.render = function() {
    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+};
+
+Enemy.prototype.checkCollisions = function(){
+   var distX = 0;
+   var distY = 0;
+
+   distX = (this.x > player.x) ? (this.x - player.x) : (player.x - this.x);
+   distY = (this.y > player.y) ? (this.y - player.y) : (player.y - this.y);
+
+   if((distX <= 100) && (distY <= 50)) {
+      console.log("colidiu");
+      player.resetPlayer();
+   }
 };
 
 
@@ -47,7 +61,10 @@ var Player = function() {
 Player.prototype.update = function(x = 0, y = 0) {
    this.x += ((this.x + x) > 420) || ((this.x + x) < -5) ? 0 : x;
    this.y += ((this.y + y) > 410) || ((this.y + y) < -12) ? 0 : y;
-   if(this.y === -10) this.resetPlayer();
+   if(this.y === -10) {
+      console.log("venceu");
+      this.resetPlayer();
+   }
 };
 
 Player.prototype.handleInput = function(inputKey) {
@@ -90,6 +107,7 @@ for(var i = 0; i < 3; i++){
 }
 
 var player = new Player();
+
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.

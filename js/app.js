@@ -3,16 +3,16 @@ var randomNum = function(fator, minimo){
    return (Math.floor((Math.random() * fator))+minimo);
 }
 
-var Enemy = function() {
+var Enemy = function(linha) {
    // Variables applied to each of our instances go here,
    // we've provided one for you to get started
 
    // The image/sprite for our enemies, this uses
    // a helper we've provided to easily load images
    this.sprite = 'images/enemy-bug.png';
-   this.x = 0;
-   this.y = (randomNum(3,0)*85)+60;
-   this.speed = randomNum(150,220);
+   this.x = -80;
+   this.y = (linha*85)+60;
+   this.speed = randomNum(250,300);
 };
 
 // Update the enemy's position, required method for game
@@ -21,7 +21,7 @@ Enemy.prototype.update = function(dt) {
    // You should multiply any movement by the dt parameter
    // which will ensure the game runs at the same speed for
    // all computers.
-   this.x += (this.speed * dt);
+   this.x += ((this.speed+(player.score*65)) * dt);
    // console.log(this.x);
    if(this.x > 505){
       this.x = -80;
@@ -41,8 +41,13 @@ Enemy.prototype.checkCollisions = function(){
    distX = (this.x > player.x) ? (this.x - player.x) : (player.x - this.x);
    distY = (this.y > player.y) ? (this.y - player.y) : (player.y - this.y);
 
-   if((distX <= 100) && (distY <= 50)) {
+   if((distX <= 50) && (distY <= 50)) {
       console.log("colidiu");
+      player.life-=1;
+      if(player.life === 0) {
+         player.score=0;
+         player.life=3;
+      }
       player.resetPlayer();
    }
 };
@@ -56,6 +61,8 @@ var Player = function() {
    this.sprite = 'images/char-horn-girl.png';
    this.x = 300;
    this.y = 400;
+   this.score = 0;
+   this.life = 3;
 };
 
 Player.prototype.update = function(x = 0, y = 0) {
@@ -63,7 +70,8 @@ Player.prototype.update = function(x = 0, y = 0) {
    this.y += ((this.y + y) > 410) || ((this.y + y) < -12) ? 0 : y;
    if(this.y === -10) {
       console.log("venceu");
-      this.resetPlayer();
+      this.score+=1;
+      setTimeout(this.resetPlayer(), 1500);
    }
 };
 
@@ -89,6 +97,12 @@ Player.prototype.handleInput = function(inputKey) {
 
 Player.prototype.render = function(){
    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+   ctx.font = "30px Arial";
+   ctx.fillStyle = 'yellow';
+   ctx.fillText("Placar: "+this.score, 10, 575);
+
+   ctx.fillStyle = 'red';
+   ctx.fillText("Vidas: "+this.life, 375, 575);
 };
 
 Player.prototype.resetPlayer = function(){
@@ -103,7 +117,7 @@ Player.prototype.resetPlayer = function(){
 var allEnemies = [];
 
 for(var i = 0; i < 3; i++){
-   allEnemies.push(new Enemy());
+   setTimeout(allEnemies.push(new Enemy(i)), 500);
 }
 
 var player = new Player();

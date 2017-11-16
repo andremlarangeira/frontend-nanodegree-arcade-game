@@ -26,7 +26,7 @@ Enemy.prototype.update = function(dt) {
    if(this.x > 505){
       this.x = -80;
    }
-   this.checkCollisions();
+   // this.checkCollisions();
 };
 
 // Draw the enemy on the screen, required method for game
@@ -34,23 +34,23 @@ Enemy.prototype.render = function() {
    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
-Enemy.prototype.checkCollisions = function(){
-   var distX = 0;
-   var distY = 0;
-
-   distX = (this.x > player.x) ? (this.x - player.x) : (player.x - this.x);
-   distY = (this.y > player.y) ? (this.y - player.y) : (player.y - this.y);
-
-   if((distX <= 50) && (distY <= 50)) {
-      console.log("colidiu");
-      player.life-=1;
-      if(player.life === 0) {
-         player.score=0;
-         player.life=3;
-      }
-      player.resetPlayer();
-   }
-};
+// Enemy.prototype.checkCollisions = function(){
+//    var distX = 0;
+//    var distY = 0;
+//
+//    distX = (this.x > player.x) ? (this.x - player.x) : (player.x - this.x);
+//    distY = (this.y > player.y) ? (this.y - player.y) : (player.y - this.y);
+//
+//    if((distX <= 50) && (distY <= 50)) {
+//       console.log("colidiu");
+//       player.life-=1;
+//       if(player.life === 0) {
+//          player.score=0;
+//          player.life=3;
+//       }
+//       player.resetPlayer();
+//    }
+// };
 
 
 // Now write your own player class

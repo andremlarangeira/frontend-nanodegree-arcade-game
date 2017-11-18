@@ -79,7 +79,7 @@ var Engine = (function(global) {
      */
     function update(dt) {
         updateEntities(dt);
-        // checkCollisions();
+        checkCollisions();
     }
 
     /* This is called by the update function and loops through all of the
@@ -96,6 +96,27 @@ var Engine = (function(global) {
         player.update();
     }
 
+
+
+    function checkCollisions(){
+      var distX = 0;
+      var distY = 0;
+
+      allEnemies.forEach(function(enemy){
+         distX = (enemy.x > player.x) ? (enemy.x - player.x) : (player.x - enemy.x);
+         distY = (enemy.y > player.y) ? (enemy.y - player.y) : (player.y - enemy.y);
+
+         if((distX <= 50) && (distY <= 50)) {
+            console.log("colidiu");
+            player.life-=1;
+            if(player.life === 0) {
+               player.score=0;
+               player.life=3;
+            }
+            player.resetPlayer();
+         }
+      });
+   }
     /* This function initially draws the "game level", it will then call
      * the renderEntities function. Remember, this function is called every
      * game tick (or loop of the game engine) because that's how games work -

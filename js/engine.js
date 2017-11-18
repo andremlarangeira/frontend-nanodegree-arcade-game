@@ -98,6 +98,10 @@ var Engine = (function(global) {
 
 
 
+    /* checa se o inimigo colidiu com o personagem, se colidiu remove uma vidas
+       do Player, caso a vida chegue a 0, zera tambem o placar, volta a vida para 3,
+       e salva o placar alcançado na variavel recorde e reseta o player para a
+       posicao inicial*/
     function checkCollisions(){
       var distX = 0;
       var distY = 0;
@@ -110,6 +114,7 @@ var Engine = (function(global) {
             console.log("colidiu");
             player.life-=1;
             if(player.life === 0) {
+               recorde = (player.score > recorde) ? player.score : recorde;
                player.score=0;
                player.life=3;
             }
